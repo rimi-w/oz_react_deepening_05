@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
-const Cart = ({ cart, setCart }) => {
-    const [isOpen, setIsOpen] = useState(true);
+const Cart = ({ cart, setCart, isDeleted, setIsDeleted }) => {
+    const [isOpen, setIsOpen] = useState(false);
+
 
     //TODO: 장바구니를 열고 닫는 함수를 완성하세요.
     //setIsOpen 함수를 사용하여 State값을 업데이트하세요.
@@ -24,9 +25,13 @@ const Cart = ({ cart, setCart }) => {
     //결제하기 버튼을 눌렀을 때 alert를 띄우고
     //장바구니를 비워주세요.
     const handlePurchase = () => {
-        cart.splice(0, cart.length);
+        setCart([]);
         return alert(`결제 되었습니다.`)
     };
+
+    const handleDelete = () => (
+        isDeleted === false ? setIsDeleted(true) : setIsDeleted(false)
+    )
 
     return (
         <div className="cart">
@@ -39,19 +44,29 @@ const Cart = ({ cart, setCart }) => {
             ) : (
                 isOpen &&
                 cart.map((item, index) => (
-                    <div className="cart-item" key={index}>
-                        <img src={item.img} alt={item.name} />
-                        <span>{item.name}</span>
-                        <span>₩{item.price.toLocaleString()}</span>
+                    <div className="cartItem">
+                        <span className="delete">
+                            <input type="checkbox" id={item.id} onClick={handleDelete} />
+                        </span>
+                        <label for={item.id} className="cart-item" key={index}>
+                            <img src={item.img} alt={item.name} />
+                            <span>{item.name}</span>
+                            <span>₩{item.price.toLocaleString()}</span>
+                        </label>
                     </div>
                 ))
             )}
             {totalPrice > 0 && (
                 <div className="price-item">합계 금액 : {totalPriceFormatted(totalPrice) || totalPrice} 원</div>
             )}
-            <button onClick={handlePurchase} disabled={cart.length === 0}>
-                결제하기
-            </button>
+            <div className="buttons">
+                <button className="deleteButton" disabled={cart.length === 0}>
+                    삭제하기
+                </button>
+                <button onClick={handlePurchase} disabled={cart.length === 0}>
+                    결제하기
+                </button>
+            </div>
         </div>
     );
 };

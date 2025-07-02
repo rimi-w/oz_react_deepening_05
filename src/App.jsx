@@ -4,6 +4,7 @@ import Cart from './components/Cart';
 
 const App = () => {
     const [cart, setCart] = useState([]);
+    const [isDeleted, setIsDeleted] = useState(true);
 
     const addToCart = (product) => {
         // TODO: 카트에 상품을 추가하는 함수를 완성하세요.
@@ -14,7 +15,8 @@ const App = () => {
         if (cart.length >= 8) {
             alert(`더 이상 상품을 추가할 수 없습니다.`);
         } else {
-            cart.push(product);
+            cart.unshift(product);
+            setIsDeleted(false);
         }
     };
 
@@ -23,7 +25,7 @@ const App = () => {
             <div className="container">
                 <ProductList addToCart={addToCart} />
             </div>
-            <Cart cart={cart} setCart={setCart} />
+            <Cart cart={cart} setCart={setCart} isDeleted={isDeleted} setIsDeleted={setIsDeleted} />
         </>
     );
 };
